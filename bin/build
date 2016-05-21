@@ -1,0 +1,14 @@
+#! /bin/bash
+set -e
+
+PT=$(dirname $0)
+cd $PT/../src
+echo "The Dockerfile path is : $(pwd)"
+echo "IMAGE_NAME: $1"
+
+IMAGE_NAME=$(docker images|grep $1|awk '{print $3}')
+
+if [ $IMAGE_NAME ]; then
+    docker rmi -f $IMAGE_NAME
+fi
+docker build -t $1 .
