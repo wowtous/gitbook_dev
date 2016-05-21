@@ -24,12 +24,12 @@ RUN curl -o /opt/node.tar.gz http://oss.npm.taobao.org/dist/node/v4.0.0/node-v4.
     rm -rf /opt/node.tar.gz
 
 # 安装gitbook-cli
-RUN	/opt/node/bin/npm install gitbook-cli -g && cd /usr/local/bin && ln -sf /opt/node/bin/* .
+RUN /opt/node/bin/npm install gitbook-cli -g && cd /usr/local/bin && ln -sf /opt/node/bin/* .
 
 # 复制或克隆项目并且build,build 结束删除原项目
-RUN	cd /usr/share/nginx && git clone git@git.coding.net:darebeat/$BOOK_NAME.git && \
-	cd $BOOK_NAME && gitbook build . /usr/share/nginx/html && \
-  cd .. && rm -rf $BOOK_NAME
+RUN cd /usr/share/nginx && git clone git@git.coding.net:darebeat/$BOOK_NAME.git && \
+    cd $BOOK_NAME && gitbook build . /usr/share/nginx/html && \
+    cd .. && rm -rf $BOOK_NAME
 
 # 设置root ssh远程登录密码为docker
 RUN echo 'root:gitbook_dev' | chpasswd
