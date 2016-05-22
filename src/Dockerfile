@@ -7,6 +7,7 @@ ENV BOOK_NAME wisdom
 # 映射文件
 ADD ./sources.list /etc/apt/sources.list
 COPY run.sh /opt/run.sh
+COPY ./node-v0.12.6-linux-x64.tar.gz /opt/
 RUN chmod a+x /opt/run.sh
 
 # 安装环境
@@ -17,11 +18,12 @@ RUN apt-get update && \
 RUN mkdir -p /var/run/sshd && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # 安装node
-RUN curl -o node.tar.gz https://codeload.github.com/nodejs/node/tar.gz/v4.0.0 && \
-    tar zxf /opt/node.tar.gz -C /opt && mv /opt/node-v4.0.0-linux-x64 node && rm -rf /opt/node.tar.gz
+RUN tar zxf /opt/node-v0.12.6-linux-x64.tar.gz -C /opt && mv /opt/node-v0.12.6-linux-x64 node && rm -rf /opt/node-v0.12.6-linux-x64.tar.gz
 
 # 安装gitbook-cli
-RUN cd /opt/node/lib && /opt/node/bin/npm install gitbook-cli -g && cd /usr/local/bin && ln -sf /opt/node/bin/* .
+RUN cd /opt/node/lib && /opt/node/bin/npm install gitbook-cli && \
+    cd /opt/node/bin && ln -sf ./lib/node_modules/gitbook-cli/bin/gitbook.js && \
+    cd /usr/local/bin && ln -sf /opt/node/bin/* .
 
 # 复制或克隆项目并且build,build 结束删除原项目
 RUN cd /usr/share/nginx && git clone git@git.coding.net:darebeat/$BOOK_NAME.git && \
