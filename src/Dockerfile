@@ -19,8 +19,7 @@ RUN mkdir -p /var/run/sshd && sed -i 's/PermitRootLogin without-password/PermitR
 RUN tar zxf /opt/node-v0.12.6-linux-x64.tar.gz -C /opt && mv /opt/node-v0.12.6-linux-x64 /opt/node && rm -rf /opt/node-v0.12.6-linux-x64.tar.gz
 
 # 安装gitbook-cli
-RUN cd /opt/node/lib && /opt/node/bin/npm install gitbook-cli && \
-    cd /opt/node/bin && ln -sf ./lib/node_modules/gitbook-cli/bin/gitbook.js && \
+RUN /opt/node/bin/npm install gitbook-cli -g && \
     cd /usr/local/bin && ln -sf /opt/node/bin/* .
 
 # 复制或克隆项目并且build,build 结束删除原项目
