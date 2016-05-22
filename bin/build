@@ -2,13 +2,35 @@
 set -e
 
 PT=$(dirname $0)
-cd $PT/../src
+GIT_PATH=$2
+
+echo "The script path: $PT"
+echo "GIT_PATH: $GIT_PATH"
+
+cd $PT/../src/lib
+echo "FOLDER: $(ls | grep ^wisdom$)"
+
+if [ ! -d wisdom ] && [ $GIT_PATH ]; then
+    echo "Git clone folder from repos."
+    git clone $GIT_PATH wisdom
+elif [ ! -d wisdom ] && [ ! $GIT_PATH ]; then
+    read -p "please enter the dir path:" GIT_PATH
+    if [ $GIT_PATH ]; then
+        git clone $GIT_PATH wisdom
+    else
+        echo "A incorrect url offered."
+        exit 0
+    fi
+else
+    echo "The folder already exists!"
+fi
+
+cd ..
 echo "The Dockerfile path is : $(pwd)"
 echo "IMAGE_NAME: $1"
 
 IMAGE_NAME=$(docker images|grep $1|awk '{print $3}')
-
 if [ $IMAGE_NAME ]; then
     docker rmi -f $IMAGE_NAME
 fi
-docker build -t $1 .
+docker build -t $1 . && rm -rf lib/wisdom

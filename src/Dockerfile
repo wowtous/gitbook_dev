@@ -1,11 +1,9 @@
 FROM ubuntu:14.04
 MAINTAINER Darebeat <fengwei2010@126.com>
 
-# 环境变量
-ENV BOOK_NAME wisdom
-
 # 映射文件
 ADD ./sources.list /etc/apt/sources.list
+ADD lib/wisdom /opt/wisdom
 COPY run.sh /opt/run.sh
 COPY ./node-v0.12.6-linux-x64.tar.gz /opt/
 RUN chmod a+x /opt/run.sh
@@ -26,9 +24,7 @@ RUN cd /opt/node/lib && /opt/node/bin/npm install gitbook-cli && \
     cd /usr/local/bin && ln -sf /opt/node/bin/* .
 
 # 复制或克隆项目并且build,build 结束删除原项目
-RUN cd /usr/share/nginx && git clone git@git.coding.net:darebeat/$BOOK_NAME.git && \
-    cd $BOOK_NAME && gitbook build . /usr/share/nginx/html && \
-    cd .. && rm -rf $BOOK_NAME
+RUN cd /opt/wisdom && gitbook build . /usr/share/nginx/html && rm -rf /opt/wisdom
 
 # 设置root ssh远程登录密码为docker
 RUN echo 'root:gitbook_dev' | chpasswd
