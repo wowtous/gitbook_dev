@@ -16,7 +16,7 @@ RUN apt-get update && \
 RUN mkdir -p /var/run/sshd && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # 安装node
-RUN tar zxf /opt/node-v0.12.6-linux-x64.tar.gz -C /opt && mv /opt/node-v0.12.6-linux-x64 node && rm -rf /opt/node-v0.12.6-linux-x64.tar.gz
+RUN tar zxf /opt/node-v0.12.6-linux-x64.tar.gz -C /opt && mv /opt/node-v0.12.6-linux-x64 /opt/node && rm -rf /opt/node-v0.12.6-linux-x64.tar.gz
 
 # 安装gitbook-cli
 RUN cd /opt/node/lib && /opt/node/bin/npm install gitbook-cli && \
