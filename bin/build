@@ -27,10 +27,20 @@ fi
 
 cd ..
 echo "The Dockerfile path is : $(pwd)"
-echo "IMAGE_NAME: $1"
 
-IMAGE_NAME=$(docker images|grep $1|awk '{print $3}')
-if [ $IMAGE_NAME ]; then
-    docker rmi -f $IMAGE_NAME
+if [ $1 ]; then
+    MG=$1
+    IMAGE_NAME=$(docker images|grep $1|awk '{print $3}')
+    if [ $IMAGE_NAME ]; then
+        docker rmi -f $IMAGE_NAME
+    fi
+else
+    read -p "please enter the image name you will build: " MG
+    if [ $MG ]; then
+        echo "IMAGE_NAME: $MG"
+    else
+        echo "image name is null"
+        exit 0
+    fi
 fi
-docker build -t $1 . && rm -rf lib/wisdom
+docker build -t $MG . && rm -rf lib/wisdom
